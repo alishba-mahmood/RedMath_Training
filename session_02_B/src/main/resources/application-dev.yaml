@@ -1,0 +1,5 @@
+news:
+  db:
+    url: jdbc:h2:mem:news
+    user: SA
+    password:

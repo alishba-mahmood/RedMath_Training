@@ -1,0 +1,30 @@
+logging:
+  level:
+    sql: debug
+    '[org.example]': debug
+    org:
+      springframework:
+        web: debug
+  pattern:
+   # console:
+    level: "%5p ${HOSTNAME}"
+  file:
+    name: target/news.log
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: none
+  h2:
+    console:
+      enabled: true
+  datasource:
+    url: ${news.db.url}
+    username: ${news.db.user}
+    password: ${news.db.password}
+
+
+server:
+  port: 9080
+
+spring.profiles.include: dev
