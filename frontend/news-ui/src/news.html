@@ -8,8 +8,8 @@
     <title>News</title>
 </head>
 
-<body>
-<div class="container container-fluid">
+<body ng-app="news-fe">
+<div class="container container-fluid" ng-controller="NewsController as $ctrl">
     <div class="row">
         <div class="col-sm-2">
             <h1>News</h1>
@@ -17,10 +17,10 @@
     </div>
     <div class="row">
         <div class="col-sm-10">
-            <input type="text" id="title" name="title" class="form-control"></input>
+            <input type="text" id="title" name="title" class="form-control" ng-model="$ctrl.title"></input>
         </div>
         <div class="col-sm-2">
-            <input type="button" id="search" name="search" value="Search" class="btn btn-success">
+            <input type="button" id="search" name="search" value="Search" class="btn btn-success" ng-click="$ctrl.search()">
         </div>
     </div>
     <div class="row">
@@ -35,13 +35,13 @@
                     <th>Tags</th>
                 </tr>
                 </thead>
-                <tbody class="table group-divider">
-                <tr>
-                    <td>Id 1</td>
-                    <td>Title 1</td>
-                    <td>Details 1</td>
-                    <td>Reported At 1</td>
-                    <td>Tags 1</td>
+                <tbody ng-if="$ctrl.display">
+                <tr ng-repeat="item in ::$ctrl.news track by $index">
+                    <td>{{::item.id}}</td>
+                    <td>{{::item.title}}</td>
+                    <td>{{::item.details}}</td>
+                    <td>{{::item.reportedAt}}</td>
+                    <td>{{::item.tags}}</td>
                 </tr>
                 </tbody>
             </table>
@@ -50,7 +50,6 @@
 </div>
 </body>
 
-<script lang="javascript" src="lib/jquery/dist/jquery.min.js"></script>
 <script lang="javascript" src="lib/bootstrap/dist/js/bootstrap.min.js"></script>
 <script lang="javascript" src="lib/angular/angular.min.js"></script>
 <script lang="javascript" src="lib/angular-resource/angular-resource.min.js"></script>
