@@ -4,11 +4,17 @@
   "description": "news-ui",
   "main": "src/index.html",
   "scripts": {
+    "postinstall": "npm run copy-libs",
+    "copy-libs": "cpx node_modules/{angular,angular-*,bootstrap/dist,jquery/dist}/**/* src/lib -u -C",
     "start": "http-server src -a localhost -p 8080 -c-1"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "cpx": "^1.5.0",
     "http-server": "^14.1.1"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.1"
   }
 }
