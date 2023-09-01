@@ -1,0 +1,47 @@
+logging:
+  level:
+    sql: debug
+    '[org.example]': debug
+    org:
+      springframework:
+        web: debug
+  pattern:
+    # console:
+    level: "%5p ${HOSTNAME}"
+  file:
+    name: target/bank.log
+
+spring:
+  application:
+    name: bank
+  jpa:
+    open-in-view: false
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      ddl-auto: none
+  h2:
+    console:
+      enabled: true
+
+  datasource:
+    url: ${account.db.url}
+    username: ${account.db.user}
+    password: ${account.db.password}
+  liquibase:
+    contexts: ${news.liquibase.contexts:}
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+server:
+  port: 1080
+  context-path: /bank
+
+spring.profiles.include: dev

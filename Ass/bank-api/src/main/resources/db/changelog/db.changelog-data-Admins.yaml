@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: data-admins
+      author: bank team
+      changes:
+        - insert:
+            tableName: admins
+            columns:
+              - column:
+                  name: user_id
+                  value: '1'
+              - column:
+                  name: user_name
+                  value: Admin1
+              - column:
+                  name: password
+                  value: '{noop}admin1'
+              - column:
+                  name: role
+                  value: ADMIN
+

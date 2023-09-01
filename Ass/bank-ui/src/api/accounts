@@ -1,0 +1,20 @@
+{"content":
+    [{"password":"{noop}ali123",
+    "name":"ali",
+    "email":"ali@gmail.com",
+    "address":"lahore",
+    "roles":"ACCOUNT_HOLDER",
+    "id":1},
+    {"password":"{noop}ahmad123",
+    "name":"ahmad",
+    "email":"ahmad@gmail.com",
+    "address":"karachi",
+    "roles":"ACCOUNT_HOLDER",
+    "id":2},
+    {"password":"{noop}admin",
+    "name":"admin",
+    "email":"admin@gmail.com",
+    "address":"karachi",
+    "roles":"ADMIN",
+    "id":3}]
+}

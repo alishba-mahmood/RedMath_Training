@@ -1,0 +1,42 @@
+databaseChangeLog:
+  - changeSet:
+      id: data-Account
+      author: bank team
+      changes:
+        - insert:
+            tableName: Balance
+            columns:
+              - column:
+                  name: balance_id
+                  value: '1'
+              - column:
+                  name: account_id
+                  value: '1'
+              - column:
+                  name: amount
+                  value: '10000'
+              - column:
+                  name: DB_CR
+                  value: '1'
+              - column:
+                  name: date
+                  value: '2000-01-01'
+
+        - insert:
+            tableName: Balance
+            columns:
+              - column:
+                  name: balance_id
+                  value: '2'
+              - column:
+                  name: account_id
+                  value: '2'
+              - column:
+                  name: amount
+                  value: '20000'
+              - column:
+                  name: DB_CR
+                  value: '0'
+              - column:
+                  name: date
+                  value: '2023-01-01'

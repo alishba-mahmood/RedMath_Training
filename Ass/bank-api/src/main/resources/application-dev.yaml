@@ -1,0 +1,8 @@
+account:
+  db:
+    url: jdbc:h2:mem:account;MODE=MySQL
+    user: SA
+    password:
+  liquibase:
+    #scontexts: local
+  h2-console: true

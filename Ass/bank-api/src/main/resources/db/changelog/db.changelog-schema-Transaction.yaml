@@ -1,0 +1,44 @@
+databaseChangeLog:
+  - changeSet:
+      id: schema-Transaction
+      author: bank team
+      changes:
+        - createTable:
+            tableName: Transaction
+            columns:
+              - column:
+                  name: transaction_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: balance_id
+                  type: bigint
+              - column:
+                  name: description
+                  type: varchar(255)
+              - column:
+                  name: amount
+                  type: bigint
+              - column:
+                  name: DB_CR
+                  type: bigint
+              - column:
+                  name: transaction_date
+                  type: DATE
+              - column:
+                  name: account_id
+                  type: bigint
+        - addForeignKeyConstraint:
+            baseTableName: Transaction
+            baseColumnNames: balance_id
+            referencedTableName: Balance
+            referencedColumnNames: balance_id
+            constraintName: fk_transaction_balance
+        - addForeignKeyConstraint:
+            baseTableName: Transaction
+            baseColumnNames: account_id
+            referencedTableName: Account
+            referencedColumnNames: account_id
+            constraintName: fk_transaction_account
