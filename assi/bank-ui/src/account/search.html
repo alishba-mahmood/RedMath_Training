@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login form</title>
+
+    <style>
+
+        body{
+        background:url('https://vidyasheela.com/web-contents/website-components/Login-Pages/transparent-login-page-template-in-html-and-css/background-img.jpg');
+        }
+        .content{
+            width:120vw;
+            max-width:1350px;
+            padding:20px;
+            min-height:auto;
+            background:white;
+            border-radius:7px;
+            border:1px solid lightgrey;
+            background-image:url('https://firebasestorage.googleapis.com/v0/b/stora-5c1e1.appspot.com/o/loginPage%2Fimg%2Fpt.webp?alt=media&token=c54bae39-9abe-421b-9c25-1c667b440d75')
+            }
+    </style>
+
+</head>
+<body>
+
+<div class="content">
+    <div class="row">
+        <div class="col-sm-6">
+            <h4 style="text-align: center; font-weight: bold;">Search Account</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-10">
+            <input type="text" id="name" name="name" class="form-control" ng-model="$ctrl.name"></input>
+        </div>
+        <div class="col-sm-2">
+            <input type="button" id="search" name="search" value="Search" class="btn btn-secondary" ng-click="$ctrl.search()">
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-sm-12">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Email</th>
+                    <th>Password</th>
+                </tr>
+                </thead>
+                <tbody ng-if="$ctrl.display">
+                <tr ng-repeat="item in ::$ctrl.accounts track by $index">
+                    <td>{{::item.id}}</td>
+                    <td>{{::item.name}}</td>
+                    <td>{{::item.address}}</td>
+                    <td>{{::item.email}}</td>
+                    <td>{{::item.password}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <!--<div class="card" ng-repeat="item in $ctrl.accounts track by $index">
+        <div class="card-header">
+            {{item.id}}
+        </div>
+        <div class="card-body">
+            <p>Name: {{item.name}}</p>
+            <p>{{item.address}}</p>
+            <p>{{item.email}}</p>
+            <p>{{item.password}}</p>
+        </div>-->
+    <!--<div class="card" style="width: 18rem" ng-repeat="item in $ctrl.accounts track by $index">
+        <div class="card-body" style="margin-bottom: 20px;">
+            <h5 class="card-title" style="font-weight: bold;">Account ID: {{item.id}}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Name: {{item.name}}</h6>
+            <p>Address: {{item.address}}</p>
+            <p>Email: {{item.email}}</p>
+            <p>Password: {{item.password}}</p>
+        </div><br>
+    </div>-->
+</div>
+
+
+
+
+
+
+</body>
+
+
+<!--
+-->

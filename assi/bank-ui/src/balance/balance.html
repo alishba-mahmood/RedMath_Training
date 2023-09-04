@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.min.css">
+    <title>Balance</title>
+</head>
+
+<body ng-app="news-fe">
+<div class="container container-fluid" ng-controller="BalanceController as $bctrl">
+    <div class="row">
+        <div class="col-sm-2">
+            <h1>Balance Details</h1>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-sm-12">
+            <table class="table table-striped table-hover table-dark">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Account_id</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>DB-CR</th>
+                </tr>
+                </thead>
+                <tbody ng-if="$ctrl.display">
+                <tr ng-repeat="item in ::$bctrl.balances track by $index">
+                    <td>{{::item.id}}</td>
+                    <td>{{::item.account_id}}</td>
+                    <td>{{::item.date}}</td>
+                    <td>{{::item.amount}}</td>
+                    <td>{{::item.db_CR}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+
+<script lang="javascript" src="../lib/bootstrap/dist/js/bootstrap.min.js"></script>
+<script lang="javascript" src="../lib/angular/angular.min.js"></script>
+<script lang="javascript" src="../lib/angular-resource/angular-resource.min.js"></script>
+<script lang="javascript" src="../js/balance/balance.js"></script>
+
+</html>
