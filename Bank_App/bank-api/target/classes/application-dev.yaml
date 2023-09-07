@@ -1,0 +1,14 @@
+bank:
+  db:
+    url: jdbc:h2:mem:bank
+    user: sa
+    password:
+#  liquibase:
+#    contexts: local
+#  h2.console: true
+
+springdoc:
+  show-login-endpoint: true
+  enable-spring-security: true
+  show-oauth2-endpoints: true
+  swagger-ui.csrf.enabled: true

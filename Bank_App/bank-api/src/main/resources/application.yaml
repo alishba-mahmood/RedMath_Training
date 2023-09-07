@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: bank
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+  datasource:
+    url: ${bank.db.url}
+    user: ${bank.db.user}
+    password: ${bank.db.password}
+  h2:
+    console:
+      enabled: true
+server:
+  port: 1080
+  servlet:
+    context-path: /bank
+
+logging:
+  level:
+    sql: debug
+    web: debug
+    '[com.example]': debug
+  pattern:
+    level: "%5p ${HOSTNAME}"
+  file:
+    name: ${bank.log.dir:target}/bank.log
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: when-authorized
+
+spring.profiles.include: dev

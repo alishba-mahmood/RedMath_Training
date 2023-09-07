@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - include:
+      file: db.changelog-schema-Account.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: db.changelog-data-Account.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: db.changelog-schema-Users.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: db.changelog-data-Users.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: db.changelog-schema-Balance.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: db.changelog-data-Balance.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: db.changelog-schema-Transaction.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: db.changelog-data-Transaction.yaml
+      relativeToChangelogFile: true

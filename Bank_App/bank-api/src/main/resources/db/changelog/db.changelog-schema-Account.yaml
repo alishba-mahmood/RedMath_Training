@@ -1,0 +1,38 @@
+databaseChangeLog:
+  - changeSet:
+      id: schema-Account
+      author: bank team
+      changes:
+        - createTable:
+            tableName: Account
+            columns:
+              - column:
+                  name: account_id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+              - column:
+                  name: email
+                  type: varchar(255)
+              - column:
+                  name: address
+                  type: varchar(1000)
+
+        - addPrimaryKey:
+            tableName: Account
+            columnNames: account_id
+            constraintName: account_pk
+        - createIndex:
+            tableName: Account
+            indexName: accounts_ix_01
+            columns:
+              - column:
+                  name: name
+
+
+
+
