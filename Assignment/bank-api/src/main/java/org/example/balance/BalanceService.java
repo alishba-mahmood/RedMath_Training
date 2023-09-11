@@ -1,11 +1,9 @@
 package org.example.balance;
 
-import org.example.account.Account;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BalanceService {
@@ -64,6 +62,6 @@ public class BalanceService {
         Balance bal = balanceRepository.findByAccountId(id);
         bal.setAmount(amount);
         bal.setDate(date);
-        //balanceRepository.updateBalanceByAccountId(id,amount,date);
+        balanceRepository.save(bal);
     }
 }

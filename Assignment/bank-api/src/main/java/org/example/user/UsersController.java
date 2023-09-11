@@ -1,15 +1,11 @@
 package org.example.user;
 
-import org.example.account.Account;
-import org.example.balance.Balance;
-import org.example.balance.BalanceService;
 import org.example.basic.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/users")

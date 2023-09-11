@@ -226,7 +226,6 @@
             {
                self.save();
             }
-            //alert('Error occured while creating account.');
             self.loadAccounts();
             $location.path('/search');
         });
@@ -256,26 +255,20 @@
 
             self.transactionService.get({ extraPath: 'getId' }).$promise.then(function(response)
             		{
-            		    console.log(response);
             		    self.transactionId = response.content;
-            			console.log("new id:"+self.transactionId);
 
             			self.transactionItem.transaction_id = self.transactionId;
                                     console.log(self.transactionItem);
                                     self.transactionService.save(self.transactionItem).$promise.then(function(response)
                         		    {
-                                        console.log(self.transactionItem);
-                                        console.log(self.transactionItem);
                                         alert('transaction created successfully');
                         			    self.loadTransactions();
-                                        $location.path('/UserSearch/'+ self.transactionItem.account_id);
+                                        $location.path('/UserBalance/'+ self.transactionItem.account_id);
                                     })
             		            .catch(function (error)
                       		    {
                       		    alert('Error occured while creating transaction. Create Transaction Again');
                                   self.loadTransactions();
-                                  //$location.path('/userTransaction/'+ self.transactionItem.account_id);
-                                  //self.saveTransaction(id);
                               });
 
                })

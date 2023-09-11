@@ -11,9 +11,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.reactive.CorsConfigurationSource;
-import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
 @EnableMethodSecurity
 @Configuration
@@ -37,7 +34,7 @@ public class WebSecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        //http.formLogin(Customizer.withDefaults());
+
         http.formLogin(config -> config.successHandler((request, response, auth) -> {
         }));
 
@@ -57,17 +54,5 @@ public class WebSecurityConfiguration {
 
         return http.build();
     }
-/*
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("http://localhost:8080"); // Allow requests from your frontend
-        configuration.addAllowedMethod(""); // Allow all HTTP methods
-        configuration.addAllowedHeader(""); // Allow all headers
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }*/
 
 }

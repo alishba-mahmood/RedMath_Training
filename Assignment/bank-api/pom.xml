@@ -47,11 +47,13 @@
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
+            <version>2.2.0</version>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.2.0</version>
             <optional>true</optional>
         </dependency>
 
@@ -80,6 +82,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.1.2</version>
                 <executions>
                     <execution>
                         <id>default-cli</id>
@@ -93,22 +96,24 @@
                     <configLocation>google_checks.xml</configLocation>
                 </configuration>
             </plugin>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-pmd-plugin</artifactId>
-                            <executions>
-                                <execution>
-                                    <id>default-cli</id>
-                                    <goals>
-                                        <goal>check</goal>
-                                    </goals>
-                                    <phase>validate</phase>
-                                </execution>
-                            </executions>
-                        </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>3.15.0</version>
+                <executions>
+                    <execution>
+                        <id>default-cli</id>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <phase>validate</phase>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>4.2.3</version>
                 <executions>
                     <execution>
                         <id>default-cli</id>

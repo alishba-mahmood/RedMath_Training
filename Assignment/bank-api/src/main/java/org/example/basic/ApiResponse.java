@@ -1,9 +1,5 @@
 package org.example.basic;
 
-import org.example.account.Account;
-
-import java.util.Optional;
-
 public class ApiResponse <T> {
 
     private final T content;

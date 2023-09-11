@@ -1,8 +1,5 @@
 package org.example.user;
 
-import org.example.balance.Balance;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.example.account.Account;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -16,8 +13,6 @@ import java.util.Optional;
 
 @Service
 public class UsersService  implements UserDetailsService {
-
-    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private final UsersRepository usersRepository;
     @Value("${bank.db.like.operator:%}")    //used to set default value of things

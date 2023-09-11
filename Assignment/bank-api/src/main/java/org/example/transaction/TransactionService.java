@@ -1,11 +1,7 @@
 package org.example.transaction;
 
 import org.example.account.AccountRepository;
-import org.example.account.AccountService;
-import org.example.balance.Balance;
 import org.example.balance.BalanceService;
-import org.example.basic.ApiResponse;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -99,37 +95,4 @@ public class TransactionService {
         balanceService.updateBalanceByAccountId(newTransaction.getAccount_id(), newTransaction.getAmount(), newTransaction.getDB_CR(),newTransaction.getDate());
         return newTransaction;
     }
-    ///////////////////////////////////////////////////////////////////////////////////////
-   /* public Transaction findByAccountId(Long id) {
-        return transactionRepository.findByAccountId(id);
-    }
-
-    public Transaction findByBalanceId(Long id) {
-        return transactionRepository.findByBalanceId(id);
-    }
-
-    public void deleteByAccountId(Long bal_id)
-    {
-        transactionRepository.deleteByAccountId(bal_id);
-    }
-
-    public Transaction create(Transaction transaction)
-    {
-        if (transaction.getId() != null && transactionRepository.existsById(transaction.getId()))
-        {
-            return null;
-        }
-        transaction.setId(System.currentTimeMillis());
-        return transactionRepository.save(transaction);
-    }
-
-    public Optional<Transaction> findById(Long id) {
-        Optional<Transaction> transaction = transactionRepository.findById(id);
-
-        if(transaction.isPresent())
-        {
-            return transaction;
-        }
-        return null;
-    }*/
 }

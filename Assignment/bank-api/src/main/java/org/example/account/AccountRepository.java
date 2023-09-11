@@ -1,7 +1,5 @@
 package org.example.account;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,14 +11,6 @@ import java.util.Optional;
 //@EnableJpaRepositories
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
-
-/*
-    Account findByName(String name);
-
-    Page<Account> findByOrderByIdDesc(Pageable pageable);
-
-    Page<Account> findByNameLikeOrderByIdDesc(Pageable pageable, String name);
-*/
 
     @Query(value="select * from ACCOUNT a where a.name like ?", nativeQuery = true)
     List<Account> findByNameLike(String name);

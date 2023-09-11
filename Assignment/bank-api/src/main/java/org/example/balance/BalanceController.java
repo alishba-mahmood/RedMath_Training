@@ -1,14 +1,11 @@
 package org.example.balance;
 
-import org.example.account.Account;
 import org.example.basic.ApiResponse;
-import org.example.transaction.Transaction;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/balances")
