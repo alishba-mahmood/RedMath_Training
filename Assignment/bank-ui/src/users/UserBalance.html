@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Balance Details</title>
+
+    <style>
+
+        body{
+        background:url('https://vidyasheela.com/web-contents/website-components/Login-Pages/transparent-login-page-template-in-html-and-css/background-img.jpg');
+        }
+        .content{
+            width:120vw;
+            max-width:1350px;
+            padding:20px;
+            min-height:auto;
+            background:white;
+            border-radius:7px;
+            border:1px solid lightgrey;
+            background-image:url('https://firebasestorage.googleapis.com/v0/b/stora-5c1e1.appspot.com/o/loginPage%2Fimg%2Fpt.webp?alt=media&token=c54bae39-9abe-421b-9c25-1c667b440d75')
+            }
+    </style>
+
+</head>
+
+<body>
+
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-dark">
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+
+                <li class="nav-item active">
+                    <a class="nav-link" style="color: white;  font-weight: bold;" ng-href="#!/UserSearch/{{ $ctrl.userId }}">Account</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" style="color: white;  font-weight: bold;" ng-href="#!/UserBalance/{{ $ctrl.userId }}">Balance</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" style="color: white;  font-weight: bold;" ng-href="#!/UserTransactions/{{ $ctrl.userId }}">Transactions</a>
+                </li>
+
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<div class="content" ng-init="$ctrl.GetBalanceDetails($ctrl.userId)">
+    
+    <div class="row">
+        <div class="col-sm-12">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Last Updated Date</th>
+					<th>Account_Id</th>
+                    <th>Current Amount</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{$ctrl.balanceItem.balance_id}}</td>
+                        <td>{{$ctrl.balanceItem.date}}</td>
+                        <td>{{$ctrl.balanceItem.account_id}}</td>
+                        <td>{{$ctrl.balanceItem.amount}}</td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    
+</div>
+
+<script lang="javascript" src="../js/account/account.js"></script>
+
+
+</body>

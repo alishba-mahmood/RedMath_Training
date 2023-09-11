@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <link rel="stylesheet" href="../css/signup.css">
+    <title>Login form</title>
+
+</head>
+
+<body>
+
+<!-- for background -->
+<div class="background"></div>
+
+<!-- for form container -->
+<div class="container">
+    <h2>Login To Bank App</h2>
+    <form action="">
+
+        <div class="form-item">
+        <span class="material-icons-outlined">
+          account_circle
+        </span>
+            <input class="form-control" type="text" id="name" placeholder="Username" ng-model="$ctrl.user.user_name" required autofocus />
+        </div>
+
+        <div class="form-item">
+        <span class="material-icons-outlined">
+          lock
+        </span>
+            <input class="form-control" type="password" id="password" placeholder="Password" ng-model="$ctrl.user.user_password" required />
+        </div>
+        <div class="row mb-3">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-5">
+                <button class="btn btn-secondary" type="button" ng-click="$ctrl.login()">Login</button>
+            </div>
+        </div>
+
+
+
+    </form>
+
+    <div id="response-error"></div>
+</div>
+</body>
+
+</html>

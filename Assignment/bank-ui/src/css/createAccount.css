@@ -1,0 +1,27 @@
+
+  body{
+    background:url('https://vidyasheela.com/web-contents/website-components/Login-Pages/transparent-login-page-template-in-html-and-css/background-img.jpg');
+
+    background-blend-mode: darken;
+  }
+
+    .content{
+        width:120vw;
+        max-width:500px;
+        padding:20px;
+        min-height:450px;
+        background:white;
+        border-radius:7px;
+        border:1px solid lightgrey;
+        background-image:url('https://firebasestorage.googleapis.com/v0/b/stora-5c1e1.appspot.com/o/loginPage%2Fimg%2Fpt.webp?alt=media&token=c54bae39-9abe-421b-9c25-1c667b440d75')
+        }
+        .body{
+          margin-top:50px
+        }
+    input{
+      padding:5px;
+      width:90%;
+      border:solid 1px ;
+      border-radius:4px;
+    }
+

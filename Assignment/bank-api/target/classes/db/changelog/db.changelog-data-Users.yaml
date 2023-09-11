@@ -1,0 +1,110 @@
+databaseChangeLog:
+  - changeSet:
+      id: data-Users
+      author: bank team
+      changes:
+        - insert:
+            tableName: Users
+            columns:
+              - column:
+                  name: user_id
+                  value: '0'
+              - column:
+                  name: user_name
+                  value: admin
+              - column:
+                  name: user_password
+                  value: '{noop}admin'
+              - column:
+                  name: user_roles
+                  value: ADMIN
+              - column:
+                  name: user_status
+                  value: ACTIVE
+        - insert:
+            tableName: Users
+            columns:
+              - column:
+                  name: user_id
+                  value: '1'
+              - column:
+                  name: user_name
+                  value: ali
+              - column:
+                  name: user_password
+                  value: '{noop}ali'
+              - column:
+                  name: user_roles
+                  value: ACCOUNT-HOLDER
+              - column:
+                  name: user_status
+                  value: ACTIVE
+              - column:
+                  name: account_id
+                  value: '1'
+        - insert:
+            tableName: Users
+            columns:
+              - column:
+                  name: user_id
+                  value: '2'
+              - column:
+                  name: user_name
+                  value: ahmad
+              - column:
+                  name: user_password
+                  value: '{noop}ahmad'
+              - column:
+                  name: user_roles
+                  value: ACCOUNT-HOLDER
+              - column:
+                  name: user_status
+                  value: ACTIVE
+              - column:
+                  name: account_id
+                  value: '2'
+
+        - insert:
+            tableName: Users
+            columns:
+              - column:
+                  name: user_id
+                  value: '3'
+              - column:
+                  name: user_name
+                  value: sara
+              - column:
+                  name: user_password
+                  value: '{noop}sara'
+              - column:
+                  name: user_roles
+                  value: ACCOUNT-HOLDER
+              - column:
+                  name: user_status
+                  value: ACTIVE
+              - column:
+                  name: account_id
+                  value: '3'
+
+        - insert:
+            tableName: Users
+            columns:
+              - column:
+                  name: user_id
+                  value: '4'
+              - column:
+                  name: user_name
+                  value: sana
+              - column:
+                  name: user_password
+                  value: '{noop}sana'
+              - column:
+                  name: user_roles
+                  value: ACCOUNT-HOLDER
+              - column:
+                  name: user_status
+                  value: ACTIVE
+              - column:
+                  name: account_id
+                  value: '4'
+

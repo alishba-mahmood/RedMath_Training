@@ -1,0 +1,53 @@
+databaseChangeLog:
+  - changeSet:
+      id: data-Account
+      author: bank team
+      changes:
+        - insert:
+            tableName: Account
+            columns:
+              - column:
+                  name: name
+                  value: 'ali'
+              - column:
+                  name: email
+                  value: 'ali@gmail.com'
+              - column:
+                  name: address
+                  value: 'lahore'
+        - insert:
+            tableName: Account
+            columns:
+              - column:
+                  name: name
+                  value: 'ahmad'
+              - column:
+                  name: email
+                  value: 'ahmad@gmail.com'
+              - column:
+                  name: address
+                  value: 'karachi'
+        - insert:
+            tableName: Account
+            columns:
+              - column:
+                  name: name
+                  value: 'sara'
+              - column:
+                  name: email
+                  value: 'sara@gmail.com'
+              - column:
+                  name: address
+                  value: 'karachi'
+        - insert:
+            tableName: Account
+            columns:
+              - column:
+                  name: name
+                  value: 'sana'
+              - column:
+                  name: email
+                  value: 'sana@gmail.com'
+              - column:
+                  name: address
+                  value: 'karachi'

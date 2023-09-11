@@ -1,0 +1,44 @@
+databaseChangeLog:
+  - changeSet:
+      id: schema-Users
+      author: bank team
+      changes:
+        - createTable:
+            tableName: Users
+            columns:
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_name
+                  type: varchar(50)
+              - column:
+                  name: user_password
+                  type: varchar(50)
+              - column:
+                  name: user_roles
+                  type: varchar(255)
+              - column:
+                  name: user_status
+                  type: varchar(10)
+              - column:
+                  name: account_id
+                  type: bigint
+        - addPrimaryKey:
+            tableName: Users
+            columnNames: user_id
+            constraintName: users_pk
+        - addForeignKeyConstraint:
+            baseTableName: Users
+            baseColumnNames: account_id
+            referencedTableName: Account
+            referencedColumnNames: account_id
+            constraintName: fk_users_account
+        - createIndex:
+            tableName: Users
+            indexName: users_ix_01
+            columns:
+              - column:
+                  name: account_id
