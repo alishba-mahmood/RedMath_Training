@@ -1,58 +1,153 @@
 package org.example.config;
 
+import com.nimbusds.jose.jwk.source.ImmutableSecret;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+import org.example.user.UsersService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.CredentialsExpiredException;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
+import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
+import org.springframework.security.oauth2.jwt.*;
+import org.springframework.security.oauth2.server.resource.introspection.OpaqueTokenIntrospector;
+import org.springframework.security.oauth2.server.resource.web.BearerTokenResolver;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.util.WebUtils;
 
-@EnableMethodSecurity
+import javax.crypto.spec.SecretKeySpec;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.Base64;
+import java.util.Map;
+import java.util.UUID;
+
 @Configuration
+@EnableMethodSecurity
+@EnableWebSecurity
 public class WebSecurityConfiguration {
-    @Value("${spring.web.security.ignored:/error,/ui/**,/favicon.ico,/swagger-ui/**,/v3/api-docs,/v3/api-docs/**}")
-    private String[] ignored = { "/error", "/ui/**", "/favicon.ico", "/swagger-ui/**", "/v3/api-docs",
-            "/v3/api-docs/**" };
+    @Value("${spring.web.security.ignored:/bank/login, /error,/ui/**,/favicon.ico}" )
+    private String[] ignored = { "/bank/login","/error", "/ui/**", "/favicon.ico"  };
 
-    @Value("${spring.web.security.ignored.get:/api/v1/balances}")
-    private String[] ignoredGet = { "bank/api/v1/balances","/api/v1/balances/**","bank/api/v1/transactions","/api/v1/transactions/**" };
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> {
-            for (String ignore : ignored) {
-                web.ignoring().requestMatchers(AntPathRequestMatcher.antMatcher(ignore));
-            }
-            for (String ignore : ignoredGet) {
-                web.ignoring().requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, ignore));
-            }
-        };
+    @Value("${spring.web.security.ignored.get:/api/v1/news}")
+    private String[] ignoredGet = { "/api/v1/accounts" };
+
+    @Value("${spring.web.security.api:/api/**}")
+    private String api = "/api/**";
+
+    @Value("${spring.web.security.session.cookie.name:SESSIONID}")
+    private String sessionId = "SESSIONID";
+
+    @Value("${spring.web.security.jwt.secret.key:fBnKDJkuDDBeejkgYCK+zz4pcyc+bfrYeTTkOqyj7Uo}")
+    private String secretKey = "fBnKDJkuDDBeejkgYCK+zz4pcyc+bfrYeTTkOqyj7Uo";
+
+    @Value("${spring.web.security.session.expiry.seconds:28800}")
+    private int sessionExpirySeconds = 28800;
+
+
+    private UsersService userService;
+    private final JwtEncoder jwtEncoder;
+    private final JwtDecoder jwtDecoder;
+
+    public WebSecurityConfiguration(UsersService userService) {
+        this.userService = userService;
+        SecretKeySpec secretKeySpec = new SecretKeySpec(Base64.getDecoder().decode(secretKey), "RSA");
+        this.jwtEncoder = new NimbusJwtEncoder(new ImmutableSecret<>(secretKeySpec));
+        this.jwtDecoder = NimbusJwtDecoder.withSecretKey(secretKeySpec).build();
     }
 
     @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return web -> {
+            for (String ignore : ignored)
+                web.ignoring().requestMatchers(AntPathRequestMatcher.antMatcher(ignore));
+        };
+    }
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.formLogin(config -> config.successHandler(authenticationSuccessHandler()));
+        http.exceptionHandling(config -> config.defaultAuthenticationEntryPointFor(authenticationEntryPoint(),
+                AntPathRequestMatcher.antMatcher(api)));
 
-        http.formLogin(config -> config.successHandler((request, response, auth) -> {
-        }));
-
-        http.logout(config -> config.logoutSuccessHandler((request, response, auth) -> {
-        }));
-
-        CookieCsrfTokenRepository csrfRepository = CookieCsrfTokenRepository.withHttpOnlyFalse();
-        csrfRepository.setCookiePath("/");
-        http.csrf(config -> config.csrfTokenRepository(csrfRepository)
+        http.csrf(config -> config.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()));
-        //http.csrf(config->config.disable());
-
-        http.authorizeHttpRequests(config -> config
-                .requestMatchers(AntPathRequestMatcher.antMatcher("/actuator/**")).hasAnyAuthority("ACTUATOR")
-                .requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/transactions/**")).permitAll()
+        http.authorizeHttpRequests(config -> config.requestMatchers("/actuator/**").hasAnyAuthority("ACTUATOR")
                 .anyRequest().authenticated());
-
+        http.sessionManagement(config -> config.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        http.oauth2ResourceServer(config -> config.opaqueToken(Customizer.withDefaults()));
+        http.logout(config -> config.addLogoutHandler(new CookieClearingLogoutHandler(sessionId)));
         return http.build();
     }
 
+    private AuthenticationEntryPoint authenticationEntryPoint() {
+        return (request, response, ex) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not Authorized");
+    }
+
+    private AuthenticationSuccessHandler authenticationSuccessHandler() {
+        return (request, response, auth) -> response.addCookie(createSessionCookie(encode(auth)));
+    }
+
+    private Cookie createSessionCookie(String token) {
+        Cookie cookie = new Cookie(sessionId, token);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        return cookie;
+    }
+
+    private String encode(Authentication auth) {
+        JwsHeader header = JwsHeader.with(MacAlgorithm.HS256).build();
+        System.out.println(("------------------------- in web config --------------------------\n"));
+        System.out.println((auth.getName()));
+        System.out.println(("------------------------- out web config --------------------------\n"));
+        JwtClaimsSet claims = JwtClaimsSet.builder()
+                .subject(auth.getName())
+                .id(UUID.randomUUID().toString())
+                .expiresAt(LocalDateTime.now().plusSeconds(sessionExpirySeconds).toInstant(ZoneOffset.UTC))
+                .build();
+        Jwt jwt = jwtEncoder.encode(JwtEncoderParameters.from(header, claims));
+        return jwt.getTokenValue();
+    }
+
+    @Bean
+    public BearerTokenResolver bearerTokenResolver() {
+        return request -> resolveBearerToken(WebUtils.getCookie(request, sessionId));
+    }
+
+    private String resolveBearerToken(Cookie cookie) {
+        String token = null;
+        if (cookie != null) {
+            token = cookie.getValue();
+        }
+        return token;
+    }
+    @Bean
+    public OpaqueTokenIntrospector opaqueTokenIntrospector() {
+        return token -> introspectorToken(token);
+    }
+
+    private OAuth2AuthenticatedPrincipal introspectorToken(String token) {
+        try {
+            Jwt jwt = jwtDecoder.decode(token);
+            UserDetails userDetails = userService.loadUserByUsername(jwt.getId(), jwt.getSubject());
+            return new DefaultOAuth2User(userDetails.getAuthorities(), Map.of("sub", userDetails.getUsername()), "sub");
+        } catch (Exception e) {
+            throw new CredentialsExpiredException(e.getMessage(), e);
+        }
+    }
 }

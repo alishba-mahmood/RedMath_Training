@@ -41,17 +41,19 @@
 
            $http.post('/bank/login',
                 'username=' + self.user.user_name + '&password=' + self.user.user_password, {
+
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded"
                 }
+
             }).then(self.loginSuccess)
                           .catch(function (error) {
                               if (error.status === -1) {
-                                alert('Something weird happened. Please Login again !!!');
+                                    self.loginSuccess
                               }
-                              if (error.status === 403) {
-                                  self.login();
-                              }
+//                              if (error.status === 403) {
+//                                    self.login();
+//                              }
                           });
         }
 
@@ -96,7 +98,8 @@
                     $http.post('/bank/logout').then(self.logoutSuccess)
                     .catch(function(error){
                         if(error.status === 403){
-                            self.logout();
+                            $location.path('/login');
+                            //self.logout();
                         }
                         if(error.status === 405){
                              $location.path('/login');

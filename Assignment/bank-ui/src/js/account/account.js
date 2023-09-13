@@ -92,6 +92,11 @@
                  $location.path('/login');
            });
      }
+
+     self.getName = function (id)
+     {
+
+     }
 	 self.loadTransactions = function ()
 	 {
             self.transactionService.get().$promise.then(function (response)

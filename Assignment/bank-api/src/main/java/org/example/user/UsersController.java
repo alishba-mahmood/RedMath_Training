@@ -24,8 +24,6 @@ public class UsersController {
 
     @GetMapping("/{user_name}")
     public Users getUserByUsername(@PathVariable("user_name") String user_name) {
-        System.out.println("in config  users service------------------------------------------------");
-        System.out.println("issss: "+usersService.findByUserName(user_name));
         return usersService.findByUserName(user_name);
     }
 }

@@ -3,6 +3,7 @@ package org.example.balance;
 import org.example.basic.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,12 +23,10 @@ public class BalanceController {
         return ResponseEntity.ok(ApiResponse.of(balanceService.findAll()));
     }
 
-    @GetMapping("/account/{id}")public ResponseEntity<ApiResponse<Balance>> findByAccId(@PathVariable("id") Long id)
+    @GetMapping("/account/{id}")public ResponseEntity<ApiResponse<Balance>> findByAccId(@PathVariable("id") Long id, Authentication auth)
     {
-        System.out.println("\n\n");
-        System.out.println("in get  balance by account id------------------------------------------------");
-
-        Balance balance = balanceService.displayBalance(id);
+        String name = auth.getName();
+        Balance balance = balanceService.displayBalance(id,name);
         return ResponseEntity.ok(ApiResponse.of(balance));
 
     }

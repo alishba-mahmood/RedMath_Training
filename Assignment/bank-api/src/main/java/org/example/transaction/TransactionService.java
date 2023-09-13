@@ -2,6 +2,8 @@ package org.example.transaction;
 
 import org.example.account.AccountRepository;
 import org.example.balance.BalanceService;
+import org.example.user.Users;
+import org.example.user.UsersService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,10 +16,13 @@ public class TransactionService {
     private final AccountRepository accountRepository;
     private final BalanceService balanceService;
 
-    public TransactionService(TransactionRepository tranRepository, AccountRepository accountRepository, BalanceService balanceService) {
+    private final UsersService usersService;
+
+    public TransactionService(TransactionRepository tranRepository, AccountRepository accountRepository, BalanceService balanceService, UsersService usersService) {
         this.transactionRepository = tranRepository;
         this.accountRepository = accountRepository;
         this.balanceService = balanceService;
+        this.usersService = usersService;
     }
 
     public List<Transaction> findAll() {
@@ -29,28 +34,40 @@ public class TransactionService {
     }
     public Optional<Long> findAccIdInTranId(Long trans_id)
     {
-        if(transactionRepository.findAccIdByTranId(trans_id) == null)
+        if(transactionRepository.findAccIdByTranId(trans_id).isEmpty())
         {
-            return null;
+            return Optional.empty();
         }
         return transactionRepository.findAccIdByTranId(trans_id);
     }
 
     public Optional<Long> findIdByName(String login_name)
     {
-        if(accountRepository.findIdByName(login_name) == null)
+        if(accountRepository.findIdByName(login_name).isEmpty())
         {
-            return null;
+            return Optional.empty();
         }
         return accountRepository.findIdByName(login_name);
     }
 
-    public List<Transaction> displayTransaction(Long id)
+    public Optional<List<Transaction>> displayTransactionsOfAccount(Long id, String loggedInData)
     {
-        List<Transaction> transaction = transactionRepository.findByAccountId(id);
-        return transaction;
+        if (loggedInData.equals("admin"))
+        {
+            return Optional.ofNullable(transactionRepository.findByAccountId(id));
+        }
+        else
+        {
+            Users user = usersService.findByUserName(loggedInData);
+            Long loggedId = user.getAccount_id();
+            if(loggedId.equals(id))
+            {
+                return Optional.ofNullable(transactionRepository.findByAccountId(id));
+            }
+            return Optional.empty();
+        }
     }
-    public Optional<Transaction> CheckAndDisplayTransaction(Long id, String name)
+    public Optional<Transaction> checkAndDisplayTransaction(Long id, String name)
     {
         Optional<Transaction> transaction = transactionRepository.findById(id);
         if (transaction.isPresent())
@@ -61,22 +78,21 @@ public class TransactionService {
             }
             Optional<Long> login_ac_id = findIdByName(name);
             Optional<Long> tran_acc_id = findAccIdInTranId(id);
-            if( login_ac_id != null && tran_acc_id!=null)
+            if( login_ac_id.isPresent() && tran_acc_id.isPresent())
             {
                 Long user_id = login_ac_id.get();
                 Long t_a_id = tran_acc_id.get();
 
-                if(user_id == t_a_id)
+                if(user_id.equals(t_a_id))
                 {
                     return transaction;
                 }
             }
-            return null;
+            return Optional.empty();
         }
-        return null;
+        return Optional.empty();
     }
     public Long getMaxId(){
-        System.out.println("\n\ngetting max id in service\n");
 
         Long id = transactionRepository.getMaxId();
         System.out.println(id);

@@ -19,14 +19,10 @@ public class AccountController {
         this.service = service;
     }
 
-
-
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
     public ResponseEntity<ApiResponse<List<Account>>> findAllAccounts()
     {
-        System.out.println("\n\n");
-        System.out.println("in find all accounts------------------------------------------------");
 
         return ResponseEntity.ok(ApiResponse.of(service.findAll()));
     }
@@ -35,18 +31,14 @@ public class AccountController {
     @GetMapping("/all")
     public ResponseEntity<ApiResponse<List<List<Object>>>> findAll()
     {
-        System.out.println("\n\n");
-        System.out.println("in find all accounts/balance/transaction------------------------------------------------");
 
         return ResponseEntity.ok(ApiResponse.of(service.findAllData()));
     }
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<Optional<Account>>> findById(@PathVariable("id") Long id)
+    public ResponseEntity<ApiResponse<Optional<Account>>> findById(@PathVariable("id") Long id, Authentication auth)
     {
-        System.out.println("\n\n");
-        System.out.println("in get by id in account------------------------------------------------");
-
-        Optional<Account> accountFound = service.CheckAndDisplay(id);
+        String name = auth.getName();
+        Optional<Account> accountFound = service.checkAndDisplay(id,name);
         if (accountFound.isEmpty())
         {
             return null;
@@ -57,12 +49,10 @@ public class AccountController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public ResponseEntity<ApiResponse<Account>> create(@RequestBody Account account) {
-        System.out.println("\n\n");
-        System.out.println("in create accounts------------------------------------------------");
+
 
         Account created = service.create(account);
         if (created != null) {
-            System.out.println(created);
             return ResponseEntity.ok(ApiResponse.of(created));
         }
         return ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -71,11 +61,9 @@ public class AccountController {
     @PreAuthorize("hasAuthority('ADMIN') OR hasAuthority('ACCOUNT_HOLDER')")
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<Optional<Account>>> update(@PathVariable Long id, @RequestBody Account account,Authentication auth) {
-        System.out.println("\n\n");
-        System.out.println("in update accounts------------------------------------------------");
 
         String login_name = auth.getName();
-        Optional<Account> accountFound = service.CheckAndUpdate(id, account,login_name);
+        Optional<Account> accountFound = service.checkAndUpdate(id, account,login_name);
         if (accountFound.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -99,8 +87,6 @@ public class AccountController {
     @GetMapping("/search")
     public ResponseEntity<ApiResponse<List<Account>>> getAccountsByNameLike(@RequestParam(name="name") String name)
     {
-
-        System.out.println("in search by name------------------------------------------------");
         List<Account> accounts = service.getAccountsByNameLike(name);
         if (accounts.isEmpty()) {
             return ResponseEntity.notFound().build();

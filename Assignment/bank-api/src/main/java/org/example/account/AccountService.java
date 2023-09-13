@@ -16,14 +16,6 @@ import java.util.Optional;
 @Service
 public class AccountService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    @Value("${news.page.min:0}")
-    public int pageMin = 0;
-
-    @Value("${news.page.size.min:1}")
-    public int pageSizeMin = 1;
-
-    @Value("${news.page.size.max:100}")
-    public int pageSizeMax = 100;
 
     @Value("${bank.db.like.operator:%}")    //used to set default value of things
     private String likeOperator;
@@ -50,31 +42,39 @@ public class AccountService {
         return nestedLists;
     }
     public boolean idFound(Long id) {
-        if(!repository.existsById(id)){
-            return false;
-        }
-        return true;
+        return repository.existsById(id);
     }
     public Optional<Long> findIdByName(String login_name)
     {
-        if(repository.findIdByName(login_name) == null)
+        if(repository.findIdByName(login_name).isEmpty())
         {
-            return null;
+            return Optional.empty();
         }
         return repository.findIdByName(login_name);
     }
-    public Optional<Account> CheckAndDisplay(Long id)
+    public Optional<Account> checkAndDisplay(Long id, String loggedInData)
     {
-        Optional<Account> acc = repository.findById(id);
-        if (acc.isPresent())
+        if (loggedInData.equals("admin"))
         {
-            return acc;
+            return repository.findById(id);
         }
-        return null;
+        else
+        {
+            Optional<Long> getId = findIdByName(loggedInData);
+            if(getId.isPresent())
+            {
+                Long loggedId = getId.get();
+                if(loggedId.equals(id))
+                {
+                    return repository.findById(id);
+                }
+            }
+            return Optional.empty();
+        }
+
     }
     public Account create(Account account)
     {
-        System.out.println("in create accounts service------------------------------------------------");
         if (account.getAccount_id() != null && repository.existsById(account.getAccount_id()))
         {
             logger.warn("Account already exist");
@@ -86,56 +86,61 @@ public class AccountService {
         return newAccount;
     }
 
-    public Optional<Account> CheckAndUpdate(Long id, Account account, String name)
+    public Optional<Account> checkAndUpdate(Long id, Account account, String name)
     {
         Optional<Long> login_id = findIdByName(name);
         if(repository.existsById(id))
         {
             if(name.equals("admin"))
             {
-                System.out.println("\n\n");
-                System.out.println("in update account service------------------------------------------------");
 
                 Optional<Account> foundAccount = repository.findById(id);
-                Account newAccount = foundAccount.get();
-                newAccount.setAccount_id(account.getAccount_id());
-                newAccount.setName(account.getName());
-                newAccount.setEmail(account.getEmail());
-                newAccount.setAddress(account.getAddress());
-                repository.save(newAccount);
-                userService.UpdateUser(id,newAccount);
-                return Optional.of(newAccount);
+                if (foundAccount.isPresent())
+                {
+                    Account newAccount = foundAccount.get();
+                    newAccount.setAccount_id(account.getAccount_id());
+                    newAccount.setName(account.getName());
+                    newAccount.setEmail(account.getEmail());
+                    newAccount.setAddress(account.getAddress());
+                    repository.save(newAccount);
+                    userService.UpdateUser(id,newAccount);
+                    return Optional.of(newAccount);
+                }
+
             }
             else {
-                if( login_id != null)
+                if(login_id.isPresent())
                 {
                     Long matched_id = login_id.get();
-                    if(matched_id == id)
+                    if(matched_id.equals(id))
                     {
                         Optional<Account> foundAccount = repository.findById(id);
-                        Account newAccount = foundAccount.get();
-                        newAccount.setAccount_id(account.getAccount_id());
-                        newAccount.setName(account.getName());
-                        newAccount.setEmail(account.getEmail());
-                        newAccount.setAddress(account.getAddress());
-                        repository.save(newAccount);
-                        return Optional.of(newAccount);
+                        if (foundAccount.isPresent())
+                        {
+                            Account newAccount = foundAccount.get();
+                            newAccount.setAccount_id(account.getAccount_id());
+                            newAccount.setName(account.getName());
+                            newAccount.setEmail(account.getEmail());
+                            newAccount.setAddress(account.getAddress());
+                            repository.save(newAccount);
+                            return Optional.of(newAccount);
+                        }
+
                     }
-                    return null;
+                    return Optional.empty();
                 }
-                return null;
+                return Optional.empty();
 
             }
 
         }
-        return null;
+        return Optional.empty();
     }
     public boolean checkAndDelete(Long id)
     {
         if(!repository.existsById(id)){
             return false;
         }
-        System.out.println("in delete accounts service------------------------------------------------");
         transactionService.deleteTransByAccID(id);
         balanceService.deleteBalanceByAccID(id);
         userService.deleteUserByAccID(id);

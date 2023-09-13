@@ -1,5 +1,7 @@
 package org.example.balance;
 
+import org.example.user.Users;
+import org.example.user.UsersService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -9,22 +11,35 @@ import java.util.List;
 public class BalanceService {
 
     private final BalanceRepository balanceRepository;
+    private final UsersService usersService;
 
-    public BalanceService(BalanceRepository balanceRepository) {
+    public BalanceService(BalanceRepository balanceRepository, UsersService usersService) {
         this.balanceRepository = balanceRepository;
+        this.usersService = usersService;
     }
 
     public List<Balance> findAll() {
         return balanceRepository.findAll();
     }
 
-    public Balance displayBalance(Long id)
+    public Balance displayBalance(Long id, String loggedInData)
     {
-        Balance balance = balanceRepository.findByAccountId(id);
-        return balance;
+        if (loggedInData.equals("admin"))
+        {
+            return balanceRepository.findByAccountId(id);
+        }
+        else
+        {
+            Users user = usersService.findByUserName(loggedInData);
+            Long loggedId = user.getAccount_id();
+            if(loggedId.equals(id))
+            {
+                return balanceRepository.findByAccountId(id);
+            }
+            return null;
+        }
     }
     public void createBalance(LocalDate date, int amount, String DB_CR, Long account_id) {
-        System.out.println("in create balance service------------------------------------------------");
         Balance bal = new Balance();
         bal.setAccount_id(account_id);
         bal.setAmount(amount);
@@ -38,23 +53,19 @@ public class BalanceService {
     }
 
     public void updateBalanceByAccountId(Long id, int amount, String cr_db,LocalDate date) {
-        System.out.println("balance updated service ------------------------------------------------");
 
         Balance updateBalance = balanceRepository.findByAccountId(id);
         if(cr_db.equals("credit"))
         {
             amount = amount + updateBalance.getAmount();
-            System.out.println("new amount +"+amount);
         }
         else {
             if(amount> updateBalance.getAmount())
             {
                 amount= updateBalance.getAmount();
-                System.out.println("new amount +"+amount);
             }
             else {
                 amount = updateBalance.getAmount() - amount;
-                System.out.println("new amount +"+amount);
             }
 
 
